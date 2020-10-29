@@ -1,0 +1,4 @@
+---
+# defaults file for kubernetes
+
+NETWORK_CIDR: 10.244.0.0/16

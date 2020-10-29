@@ -1,0 +1,34 @@
+---
+
+- name: reset state
+  shell: |
+    kubeadm reset --force
+
+- name: initiate control plane
+  shell: |
+    kubeadm init --pod-network-cidr={{ NETWORK_CIDR }}
+  register: kluster
+
+- name: create root directory
+  file:
+    path: .kube
+    state: directory
+
+- name: configure kluster
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: .kube/config
+    remote_src: yes
+
+# - name: import network addon
+#   shell: |
+#     kubectl apply -f {{ ADDON_URI }}
+
+- name: bootstrap network addon
+  template:
+    src: addon.yml.j2
+    dest: addon.yml
+
+- name: debug
+  debug:
+    msg: "Hello {{ kluster }}"

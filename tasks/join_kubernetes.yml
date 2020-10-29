@@ -1,0 +1,9 @@
+---
+
+- name: reset state
+  shell: |
+    kubeadm reset --force
+
+- name: join minion
+  shell: |
+    kubeadm join {{ control_plane }} --token {{ token }} --discovery-token-ca-cert-hash {{ discovery_token_ca_cert_hash }}

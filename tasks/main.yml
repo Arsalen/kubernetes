@@ -1,0 +1,18 @@
+---
+# tasks file for kubernetes
+
+- name: install Docker
+  import_tasks: install_docker.yml
+
+- name: install Kubernetes
+  import_tasks: install_kubernetes.yml
+
+- name: initiate Kubernetes
+  import_tasks: initiate_kubernetes.yml
+  tags:
+    - initiate
+
+- name: join Kubernetes
+  import_tasks: join_kubernetes.yml
+  tags:
+    - join

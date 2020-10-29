@@ -1,0 +1,65 @@
+---
+
+- name: uninstall old versions
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker 
+    - docker-engine 
+    - docker.io 
+    - containerd 
+    - runc
+
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
+
+- name: add Docker official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: add Docker official release repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+
+- name: install Docker
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: create docker group
+  group:
+    name: docker
+  register: docker_group
+
+- name: add user to group
+  user:
+    name: "{{ ansible_user }}"
+    group: docker
+  when: docker_group.state == "present"
+  notify: docker service
+
+- name: stat docker-compose
+  stat:
+    path: /usr/local/bin/docker-compose
+  register: docker_compose
+
+- name: install docker-compose
+  uri:
+    url: "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    creates: yes
+    mode: 0744
+  when: docker_compose.stat.exists == False

@@ -1,0 +1,8 @@
+---
+# handlers file for kubernetes
+
+- name: docker service
+  service:
+    name: docker
+    enabled: yes
+    state: started
