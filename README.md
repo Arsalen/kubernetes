@@ -30,7 +30,7 @@ First we run the command in comment on the playbook below on the master node (co
   ---
   - hosts: master
     roles:
-      - kubernetes
+      - arsalen.kubernetes
   ...
   # ansible-playbook book.yml -i hosts --skip-tags join
 ```
@@ -43,7 +43,7 @@ Second we run the command in comment on the playbook below on the slave nodes (m
   ---
   - hosts: slaves
     roles:
-      - kubernetes
+      - arsalen.kubernetes
   ...
   # ansible-playbook book.yml -i hosts --skip-tags initiate --extra-vars "control_plane=<control:plane> token=<to.ken> discovery_token_ca_cert_hash=<sha256:discovery-token-ca-cert-hash>"
 ```
