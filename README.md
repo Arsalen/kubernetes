@@ -1,4 +1,4 @@
-Role Name
+Kubernetes
 =========
 
 A role to provision a kubernetes cluster on ubuntu servers in few minutes.
